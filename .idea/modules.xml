@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/api_milvus.iml" filepath="$PROJECT_DIR$/.idea/api_milvus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/telebot_milvus.iml" filepath="$PROJECT_DIR$/.idea/telebot_milvus.iml" />
     </modules>
   </component>
 </project>
