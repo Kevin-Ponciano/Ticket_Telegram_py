@@ -1,7 +1,14 @@
+from io import StringIO
+import pandas as pd
 import requests as requests
+import json
 
 api_key = 'eKdpEYqaCUzT3TXTPwGo3xZb2HeEtas24xMK8VmOUi6nGVNoHiQSMVWxyFcA5wJPcQz5pvNRonOw2eVCo2twNRJPbTSpUp7W8F0KY'
 headers = {'Authorization': api_key}
+
+
+def json_indentado(obj):
+    print(json.dumps(obj, indent=2))
 
 
 def pesquisar_contatos(celular):
@@ -40,7 +47,7 @@ def novo_ticket(tokken, assunto, descricao=' ', email=' ', telefone=' ', nome=' 
         print(f'{ticket_response.text}\n{ticket_response.status_code}')
 
 
-def pesquisar_chamado(numero_ticket):
+def pesquisar_chamado(numero_ticket=''):
     url = 'https://apiintegracao.milvus.com.br/api/chamado/listagem'
 
     payload = dict(filtro_body={
@@ -69,22 +76,69 @@ def pesquisar_chamado(numero_ticket):
 
     if chamado_response.status_code == 201 or chamado_response.status_code == 200:
         print('consulta realizada')
-        print(chamado_response.json()['lista'])
+        json_indentado(chamado_response.json()['lista'])
     else:
         print(f'{chamado_response.text}\n{chamado_response.status_code}')
 
-def exportar_relatorio(relatorio):
+
+def exportar_relatorio_personalizado(relatorio):
     url = 'https://apiintegracao.milvus.com.br/api/relatorio-personalizado/exportar'
     payload = dict({
-        "nome":relatorio;
-        "tipo":"xlsx"
+        "nome": relatorio,
+        "tipo": "csv"
     })
     relatorio_response = requests.post(url, headers={'Authorization': api_key}, json=payload)
 
     if relatorio_response.status_code == 201 or relatorio_response.status_code == 200:
         print('consulta realizada')
-        print(relatorio_response.json()['lista'])
+        print(relatorio_response.text)
     else:
         print(f'{relatorio_response.text}\n{relatorio_response.status_code}')
 
-exportar_relatorio("ATENDIMENTO ÚLTIMOS 30 DIAS")
+
+def listar_acompanhamento(numero_ticket):
+    url = "https://apiintegracao.milvus.com.br/api/chamado/acompanhamento/tecnico/" + str(numero_ticket)
+    params = {"tipo": "comentarios"}
+    acompanhamento_response = requests.get(url, headers=headers)
+
+    if acompanhamento_response.status_code == 201 or acompanhamento_response.status_code == 200:
+        print('consulta realizada')
+        for i in range(len(acompanhamento_response.json()['retorno'])):
+            if acompanhamento_response.json()['retorno'][i]['texto'].count('para [VISITA TÉCNICA]') != 0:
+                print(acompanhamento_response.json()['retorno'][i]['texto'])
+                break
+
+        # print(acompanhamento_response.json()['retorno'][]['texto'])
+    else:
+        print(f'{acompanhamento_response.text}\n{acompanhamento_response.status_code}')
+
+
+def exportar_relatorio():
+    url = "https://apiintegracao.milvus.com.br/api/relatorio-atendimento/exporta"
+    payload = dict({
+        "filtro_body": {
+            "nome_tecnico": "",
+            "data_inicial": "2022-09-26",
+            "data_final": "2022-10-26",
+            "codigo": "",
+            "tipo_arquivo": "csv",
+            "token": ""
+        }
+    })
+
+    relatorio_response = requests.post(url, headers={'Authorization': api_key}, json=payload)
+
+    if relatorio_response.status_code == 201 or relatorio_response.status_code == 200:
+        print('consulta realizada')
+        # print(relatorio_response.text)
+        sd = StringIO(relatorio_response.text)
+        df = pd.DataFrame(sd)
+
+        df.to_csv('relatorio.csv')
+    else:
+        print(f'{relatorio_response.text}\n{relatorio_response.status_code}')
+
+
+# exportar_relatorio("ATENDIMENTO ÚLTIMOS 30 DIAS")
+
+exportar_relatorio()
