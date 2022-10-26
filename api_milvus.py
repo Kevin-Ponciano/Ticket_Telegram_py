@@ -40,7 +40,7 @@ def novo_ticket(tokken, assunto, descricao=' ', email=' ', telefone=' ', nome=' 
         print(f'{ticket_response.text}\n{ticket_response.status_code}')
 
 
-def pesqueisar_chamado(numero_ticket):
+def pesquisar_chamado(numero_ticket):
     url = 'https://apiintegracao.milvus.com.br/api/chamado/listagem'
 
     payload = dict(filtro_body={
@@ -73,6 +73,18 @@ def pesqueisar_chamado(numero_ticket):
     else:
         print(f'{chamado_response.text}\n{chamado_response.status_code}')
 
+def exportar_relatorio(relatorio):
+    url = 'https://apiintegracao.milvus.com.br/api/relatorio-personalizado/exportar'
+    payload = dict({
+        "nome":relatorio;
+        "tipo":"xlsx"
+    })
+    relatorio_response = requests.post(url, headers={'Authorization': api_key}, json=payload)
 
-pesquisar_contatos(27988850129)
-pesqueisar_chamado(18949)
+    if relatorio_response.status_code == 201 or relatorio_response.status_code == 200:
+        print('consulta realizada')
+        print(relatorio_response.json()['lista'])
+    else:
+        print(f'{relatorio_response.text}\n{relatorio_response.status_code}')
+
+exportar_relatorio("ATENDIMENTO ÚLTIMOS 30 DIAS")
