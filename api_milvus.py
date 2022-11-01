@@ -141,4 +141,4 @@ def exportar_relatorio():
 
 # exportar_relatorio("ATENDIMENTO ÚLTIMOS 30 DIAS")
 
-exportar_relatorio()
+pesquisar_chamado(23)
