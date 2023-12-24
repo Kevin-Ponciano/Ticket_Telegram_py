@@ -3,7 +3,7 @@ import pandas as pd
 import requests as requests
 import json
 
-api_key = 'eKdpEYqaCUzT3TXTPwGo3xZb2HeEtas24xMK8VmOUi6nGVNoHiQSMVWxyFcA5wJPcQz5pvNRonOw2eVCo2twNRJPbTSpUp7W8F0KY'
+api_key = ''
 headers = {'Authorization': api_key}
 
 
