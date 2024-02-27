@@ -3,8 +3,8 @@ from telebot import types
 import telegram
 
 import api_milvus as apm
-api_Kevin_Bot_bot = '5273052420:AAGDUK0qZc1Sx_0mg2fjIbA9S7ISJ2PQQcI'
-api_Kevin_Pot_Bot = '2113338109:AAEvNb4iqeueL7c4w2hoZAbcBkmMBO8CwQA'
+api_Kevin_Bot_bot = ''
+api_Kevin_Pot_Bot = ''
 
 
 bot = telebot.TeleBot(api_Kevin_Pot_Bot)
